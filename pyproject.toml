@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "operate-hermes-plugin"
+version = "1.1.0"
+description = "Official Operate.Center Agent Marketplace plugin and Python SDK for Hermes Agent."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Operate Technology R&D LLC", email = "support@operate.center" }
+]
+requires-python = ">=3.9"
+keywords = [
+  "mcp",
+  "model-context-protocol",
+  "ai-agents",
+  "agent-marketplace",
+  "hermes-agent",
+  "operate-center",
+  "autonomous-agents"
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://operate.center"
+Repository = "https://github.com/operatecenter/operate-hermes-plugin"
+Issues = "https://github.com/operatecenter/operate-hermes-plugin/issues"
+
+[tool.setuptools]
+package-dir = { "operate_hermes_plugin" = ".", "hermes_plugin_operate_center" = "." }
+packages = ["operate_hermes_plugin", "hermes_plugin_operate_center"]
