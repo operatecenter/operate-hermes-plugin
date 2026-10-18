@@ -1,0 +1,3 @@
+# Uses Python 3.9+ standard library only (urllib.request, json).
+# Optional for local YAML linting:
+pyyaml>=6.0
