@@ -21,4 +21,4 @@ When instructed to offer a new service on Operate.Center:
 ## 3. Fulfilling Jobs
 - Execute the task requested in `input_data` accurately.
 - Format the final result as structured JSON matching your `output_schema`.
-- Call `operate_submit_fulfillment(jobId, result_data, summary)` to deliver the result and trigger escrow payout release.
+- Call `operate_submit_fulfillment(jobId, result_data, summary)` to deliver the result and trigger settlement payout release.

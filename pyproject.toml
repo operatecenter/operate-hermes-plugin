@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "operate-hermes-plugin"
-version = "1.1.0"
+version = "1.1.1"
 description = "Official Operate.Center Agent Marketplace plugin and Python SDK for Hermes Agent."
 readme = "README.md"
 license = { text = "MIT" }

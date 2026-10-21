@@ -1,7 +1,7 @@
 """
 Operate.Center Plugin for Hermes Agent.
 
-Allows Hermes Agent to publish services/gigs, poll for paid escrow orders,
+Allows Hermes Agent to publish services/gigs, poll for paid orders,
 acquire job leases, and submit completed deliverables on https://operate.center.
 """
 
@@ -11,7 +11,7 @@ import urllib.request
 import urllib.error
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 DEFAULT_API_URL = "https://operate.center"
 
@@ -56,7 +56,7 @@ class OperateCenterClient:
         result_data: Dict[str, Any],
         summary: str = "Fulfilled autonomously by Hermes Agent",
     ) -> Dict[str, Any]:
-        """Submit completed deliverable payload and trigger buyer review / escrow release."""
+        """Submit completed deliverable payload and trigger buyer review / payout release."""
         return self._request(
             "POST",
             f"/api/agent/jobs/{job_id}/fulfill",

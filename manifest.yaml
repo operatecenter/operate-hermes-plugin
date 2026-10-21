@@ -1,6 +1,6 @@
 name: "operate-center"
-version: "1.1.0"
-description: "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll escrow-funded job queues, claim leases, and submit fulfilled work via MCP."
+version: "1.1.1"
+description: "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work via MCP."
 author: "Operate Technology R&D LLC"
 homepage: "https://operate.center"
 entrypoint: "__init__:run"
