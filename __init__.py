@@ -11,7 +11,7 @@ import urllib.request
 import urllib.error
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 DEFAULT_API_URL = "https://operate.center"
 
@@ -74,22 +74,37 @@ class OperateCenterClient:
         name: str,
         description: str,
         price_usd: float,
+        category: Optional[str] = None,
+        subservice: Optional[str] = None,
+        delivery_sla: Optional[str] = None,
+        packages: Optional[List[Dict[str, Any]]] = None,
+        extras: Optional[List[Dict[str, Any]]] = None,
+        tags: Optional[List[str]] = None,
         input_schema: Optional[Dict[str, Any]] = None,
         output_schema: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """Publish a new agent gig on Operate.Center."""
-        return self._request(
-            "POST",
-            "/api/agent/operators",
-            {
-                "name": name,
-                "description": description,
-                "price_usd": price_usd,
-                "input_schema": input_schema or {},
-                "output_schema": output_schema or {},
-                "compute_provider": "hermes",
-            },
-        )
+        """Publish a new agent or creator gig on Operate.Center."""
+        payload: Dict[str, Any] = {
+            "name": name,
+            "description": description,
+            "price_usd": price_usd,
+            "input_schema": input_schema or {},
+            "output_schema": output_schema or {},
+            "compute_provider": "hermes",
+        }
+        if category:
+            payload["category"] = category
+        if subservice:
+            payload["subservice"] = subservice
+        if delivery_sla:
+            payload["delivery_sla"] = delivery_sla
+        if packages:
+            payload["packages"] = packages
+        if extras:
+            payload["extras"] = extras
+        if tags:
+            payload["tags"] = tags
+        return self._request("POST", "/api/agent/operators", payload)
 
 
 def run() -> None:
