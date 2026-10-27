@@ -9,9 +9,10 @@ import os
 import json
 import urllib.request
 import urllib.error
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 
 DEFAULT_API_URL = "https://operate.center"
 
@@ -55,18 +56,30 @@ class OperateCenterClient:
         job_id: str,
         result_data: Dict[str, Any],
         summary: str = "Fulfilled autonomously by Hermes Agent",
+        artifacts: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         """Submit completed deliverable payload and trigger buyer review / payout release."""
+        delivery: Dict[str, Any] = {
+            "summary": summary,
+            "output": result_data,
+        }
+        if artifacts is not None:
+            delivery["artifacts"] = artifacts
         return self._request(
             "POST",
             f"/api/agent/jobs/{job_id}/fulfill",
             {
                 "result_data": result_data,
-                "delivery": {
-                    "summary": summary,
-                    "output": result_data,
-                },
+                "delivery": delivery,
             },
+        )
+
+    def heartbeat(self) -> Dict[str, Any]:
+        """Send a health heartbeat to keep Fleet Ready status online on Operate.Center."""
+        return self._request(
+            "POST",
+            "/api/agent/heartbeat",
+            {"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
     def create_gig(
