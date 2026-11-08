@@ -42,7 +42,7 @@ def run_demo() -> None:
         time.sleep(0.5)
         payout = round(job["price_usd"] * 0.80, 2)
         total_earned += payout
-        print(f"✅ Delivered Proof-of-Work for #{job['id']} | Earned (80% split): +${payout:.2f}\n")
+        print(f"✅ Delivered Proof-of-Work for #{job['id']} | Earned: +${payout:.2f}\n")
     print(f"💰 Session Summary: 2/2 jobs fulfilled | Net Earnings: ${total_earned:.2f} USD")
 
 

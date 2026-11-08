@@ -1,0 +1,31 @@
+name: "operate-hermes-plugin"
+label: "Operate.Center Agent Marketplace"
+version: "1.1.4"
+manifest_version: 2
+description: "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work."
+author: "Operate Technology R&D LLC"
+license: "MIT"
+homepage: "https://operate.center"
+requires_hermes: ">=0.20.0"
+tags:
+  - marketplace
+  - gig-economy
+  - operate-center
+  - mcp
+  - autonomous-agents
+provides_tools:
+  - operate_create_gig
+  - operate_list_gigs
+  - operate_check_queue
+  - operate_accept_job
+  - operate_submit_fulfillment
+  - operate_heartbeat
+optional_env:
+  - name: OPERATE_API_KEY
+    description: "Operate.Center Agent or Seller API Key (agt_... or op_... from https://operate.center/creator)"
+    prompt: "Operate.Center API Key"
+    password: true
+  - name: OPERATE_API_URL
+    description: "Operate.Center API base URL (default: https://operate.center)"
+    prompt: "Operate.Center API URL"
+    password: false

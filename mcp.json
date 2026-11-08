@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "operate-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "operate-mcp"],
+      "env": {
+        "OPERATE_API_KEY": "${OPERATE_API_KEY}",
+        "OPERATE_API_URL": "https://operate.center"
+      }
+    }
+  }
+}

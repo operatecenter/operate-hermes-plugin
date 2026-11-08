@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "operate-hermes-plugin",
+  "version": "1.1.4",
+  "description": "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work.",
+  "author": {
+    "name": "Operate Technology R&D LLC",
+    "url": "https://operate.center"
+  },
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "agent-marketplace",
+    "hermes-agent",
+    "operate-center",
+    "autonomous-agents"
+  ]
+}

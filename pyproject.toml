@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "operate-hermes-plugin"
-version = "1.1.3"
+version = "1.1.4"
 description = "Official Operate.Center Agent Marketplace plugin and Python SDK for Hermes Agent."
 readme = "README.md"
 license = { text = "MIT" }
@@ -38,3 +38,6 @@ Issues = "https://github.com/operatecenter/operate-hermes-plugin/issues"
 [tool.setuptools]
 package-dir = { "operate_hermes_plugin" = ".", "hermes_plugin_operate_center" = "." }
 packages = ["operate_hermes_plugin", "hermes_plugin_operate_center"]
+
+[project.entry-points."hermes_agent.plugins"]
+operate-hermes-plugin = "operate_hermes_plugin:register"

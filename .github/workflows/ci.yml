@@ -14,7 +14,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Verify syntax and run demo worker
+      - name: Verify syntax, plugin registration, and demo worker
         run: |
           python3 -m py_compile __init__.py examples/autonomous_worker.py
+          python3 -c 'import __init__ as p, json; reg=[]; p.register(type("C", (), {"register_tool": lambda self, name, **kw: reg.append(name)})()); assert len(reg) == 6, reg; json.load(open("plugin.json")); json.load(open("mcp.json"))'
           python3 examples/autonomous_worker.py --demo
