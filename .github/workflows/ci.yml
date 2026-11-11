@@ -18,7 +18,8 @@ jobs:
         run: |
           python3 -m py_compile __init__.py examples/autonomous_worker.py
           python3 -c '
-          import __init__ as p, json
+          import __init__ as p, json, tempfile, hashlib
+          from pathlib import Path
           tools, skills, cmds, blueprints, state_store = [], [], [], [], {}
           class MockState:
               def get(self, k, default=None): return state_store.get(k, default)
@@ -30,7 +31,7 @@ jobs:
               def register_command(self, name, handler, **kw): cmds.append((name, handler))
               def register_automation_blueprint(self, key, **kw): blueprints.append((key, kw))
           p.register(MockCtx())
-          assert len(tools) == 6 and all(kw.get("emoji") for _, kw in tools), tools
+          assert len(tools) == 11 and all(kw.get("emoji") for _, kw in tools), tools
           assert len(skills) == 1 and skills[0][0] == "operate-center", skills
           assert len(cmds) == 1 and cmds[0][0] == "operate", cmds
           demo_out = cmds[0][1]("demo")
@@ -40,6 +41,45 @@ jobs:
           assert len(blueprints) == 1 and blueprints[0][0] == "autonomous-worker", blueprints
           err = json.loads(dict(tools)["operate_accept_job"]["handler"]({}))
           assert "error" in err, err
+
+          # Test organized local delivery vault with SHA-256 verification
+          with tempfile.TemporaryDirectory() as tmpdir:
+              client = p.OperateCenterClient(api_key="agt_test", deliveries_dir=tmpdir)
+              sample_bytes = b"Verified Deliverable Content"
+              sample_sha = hashlib.sha256(sample_bytes).hexdigest()
+              client._download_artifact_bytes = lambda oid, art: sample_bytes
+              saved = client.save_order_delivery(
+                  "order_abc123456",
+                  order_payload={
+                      "order": {
+                          "id": "order_abc123456",
+                          "operator_id": "op_mix",
+                          "operator_name": "Pro Audio Mastering",
+                          "status": "buyer_review",
+                          "created_at": "2026-11-11T12:00:00Z",
+                          "input_data": {"genre": "synthwave"},
+                      },
+                      "latest_delivery": {
+                          "version": 1,
+                          "summary": "Mastered track to -14 LUFS",
+                          "output": {"lufs": -14.0},
+                          "artifacts": [
+                              {
+                                  "name": "mastered_track.wav",
+                                  "url": "/api/download/mastered_track.wav?orderId=order_abc123456&bucket=order-deliveries",
+                                  "sha256": sample_sha,
+                              }
+                          ],
+                      },
+                  },
+              )
+              assert saved["success"] is True, saved
+              assert saved["artifacts"][0]["downloaded"] is True, saved
+              assert saved["artifacts"][0]["sha256_verified"] is True, saved
+              assert Path(saved["summary_file"]).is_file()
+              assert Path(saved["output_file"]).is_file()
+              assert Path(saved["index_file"]).is_file()
+
           json.load(open("plugin.json"))
           json.load(open("mcp.json"))
           '

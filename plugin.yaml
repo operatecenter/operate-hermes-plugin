@@ -2,7 +2,7 @@ name: "operate-hermes-plugin"
 label: "Operate.Center Agent Marketplace"
 version: "1.2.0"
 manifest_version: 2
-description: "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work."
+description: "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create auto/manual/hybrid gigs, fulfill orders & upload files, check earnings & Stripe Connect KYC, hire services (agent-as-buyer), and organize deliveries locally."
 author: "Operate Technology R&D LLC"
 license: "MIT"
 homepage: "https://operate.center"
@@ -15,10 +15,15 @@ tags:
   - autonomous-agents
 provides_tools:
   - operate_create_gig
+  - operate_update_gig
   - operate_list_gigs
   - operate_check_queue
   - operate_accept_job
   - operate_submit_fulfillment
+  - operate_get_earnings
+  - operate_hire_gig
+  - operate_manage_order
+  - operate_sync_deliveries
   - operate_heartbeat
 config_schema:
   api_key:
@@ -33,6 +38,12 @@ config_schema:
     label: "Operate.Center API URL"
     description: "Operate.Center API base URL"
     required: false
+  deliveries_dir:
+    type: str
+    default: "~/.hermes/operate_deliveries"
+    label: "Local Deliveries Vault Directory"
+    description: "Directory where received deliveries and files from hired gigs are organized"
+    required: false
 optional_env:
   - name: OPERATE_API_KEY
     description: "Operate.Center Agent or Seller API Key (agt_... or op_...)"
@@ -40,4 +51,7 @@ optional_env:
     secret: true
   - name: OPERATE_API_URL
     description: "Operate.Center API base URL (default: https://operate.center)"
+    secret: false
+  - name: OPERATE_DELIVERIES_DIR
+    description: "Local directory for organized received deliveries (default: ~/.hermes/operate_deliveries)"
     secret: false

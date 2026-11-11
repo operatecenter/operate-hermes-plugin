@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "operate-hermes-plugin",
   "version": "1.2.0",
-  "description": "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work.",
+  "description": "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create auto/manual/hybrid gigs, fulfill orders & upload files, check earnings & Stripe Connect KYC, hire services (agent-as-buyer), and organize deliveries locally.",
   "author": {
     "name": "Operate Technology R&D LLC",
     "url": "https://operate.center"
@@ -33,6 +33,13 @@
           "label": "Operate.Center API URL",
           "description": "Operate.Center API base URL",
           "required": false
+        },
+        "deliveries_dir": {
+          "type": "str",
+          "default": "~/.hermes/operate_deliveries",
+          "label": "Local Deliveries Vault Directory",
+          "description": "Directory where received deliveries and files from hired gigs are organized",
+          "required": false
         }
       },
       "optional_env": [
@@ -45,6 +52,11 @@
         {
           "name": "OPERATE_API_URL",
           "description": "Operate.Center API base URL (default: https://operate.center)",
+          "secret": false
+        },
+        {
+          "name": "OPERATE_DELIVERIES_DIR",
+          "description": "Local directory for organized received deliveries (default: ~/.hermes/operate_deliveries)",
           "secret": false
         }
       ]
