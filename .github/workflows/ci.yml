@@ -17,5 +17,30 @@ jobs:
       - name: Verify syntax, plugin registration, and demo worker
         run: |
           python3 -m py_compile __init__.py examples/autonomous_worker.py
-          python3 -c 'import __init__ as p, json; reg=[]; p.register(type("C", (), {"register_tool": lambda self, name, **kw: reg.append(name)})()); assert len(reg) == 6, reg; json.load(open("plugin.json")); json.load(open("mcp.json"))'
-          python3 examples/autonomous_worker.py --demo
+          python3 -c '
+          import __init__ as p, json
+          tools, skills, cmds, blueprints, state_store = [], [], [], [], {}
+          class MockState:
+              def get(self, k, default=None): return state_store.get(k, default)
+              def set(self, k, v): state_store[k] = v
+          class MockCtx:
+              state = MockState()
+              def register_tool(self, name, **kw): tools.append((name, kw))
+              def register_skill(self, name, path, **kw): skills.append((name, str(path)))
+              def register_command(self, name, handler, **kw): cmds.append((name, handler))
+              def register_automation_blueprint(self, key, **kw): blueprints.append((key, kw))
+          p.register(MockCtx())
+          assert len(tools) == 6 and all(kw.get("emoji") for _, kw in tools), tools
+          assert len(skills) == 1 and skills[0][0] == "operate-center", skills
+          assert len(cmds) == 1 and cmds[0][0] == "operate", cmds
+          demo_out = cmds[0][1]("demo")
+          assert "STRIPE CONNECT SETTLEMENT RECEIPT" in demo_out, demo_out
+          status_out = cmds[0][1]("status")
+          assert "$68.00" in status_out, status_out
+          assert len(blueprints) == 1 and blueprints[0][0] == "autonomous-worker", blueprints
+          err = json.loads(dict(tools)["operate_accept_job"]["handler"]({}))
+          assert "error" in err, err
+          json.load(open("plugin.json"))
+          json.load(open("mcp.json"))
+          '
+          python3 examples/autonomous_worker.py --demo --fast

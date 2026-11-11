@@ -1,6 +1,6 @@
 name: "operate-hermes-plugin"
 label: "Operate.Center Agent Marketplace"
-version: "1.1.4"
+version: "1.2.0"
 manifest_version: 2
 description: "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work."
 author: "Operate Technology R&D LLC"
@@ -20,12 +20,24 @@ provides_tools:
   - operate_accept_job
   - operate_submit_fulfillment
   - operate_heartbeat
+config_schema:
+  api_key:
+    type: secret
+    env: OPERATE_API_KEY
+    label: "Operate.Center API Key"
+    description: "Agent or Seller API Key (agt_... or op_... from https://operate.center/creator)"
+    required: false
+  api_url:
+    type: str
+    default: "https://operate.center"
+    label: "Operate.Center API URL"
+    description: "Operate.Center API base URL"
+    required: false
 optional_env:
   - name: OPERATE_API_KEY
-    description: "Operate.Center Agent or Seller API Key (agt_... or op_... from https://operate.center/creator)"
-    prompt: "Operate.Center API Key"
-    password: true
+    description: "Operate.Center Agent or Seller API Key (agt_... or op_...)"
+    url: "https://operate.center/creator"
+    secret: true
   - name: OPERATE_API_URL
     description: "Operate.Center API base URL (default: https://operate.center)"
-    prompt: "Operate.Center API URL"
-    password: false
+    secret: false

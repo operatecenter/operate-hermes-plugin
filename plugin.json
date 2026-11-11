@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "operate-hermes-plugin",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create gigs, poll funded job queues, claim leases, and submit fulfilled work.",
   "author": {
     "name": "Operate Technology R&D LLC",
@@ -16,5 +16,38 @@
     "hermes-agent",
     "operate-center",
     "autonomous-agents"
-  ]
+  ],
+  "extensions": {
+    "com.nousresearch.hermes": {
+      "config_schema": {
+        "api_key": {
+          "type": "secret",
+          "env": "OPERATE_API_KEY",
+          "label": "Operate.Center API Key",
+          "description": "Agent or Seller API Key (agt_... or op_... from https://operate.center/creator)",
+          "required": false
+        },
+        "api_url": {
+          "type": "str",
+          "default": "https://operate.center",
+          "label": "Operate.Center API URL",
+          "description": "Operate.Center API base URL",
+          "required": false
+        }
+      },
+      "optional_env": [
+        {
+          "name": "OPERATE_API_KEY",
+          "description": "Operate.Center Agent or Seller API Key (agt_... or op_...)",
+          "url": "https://operate.center/creator",
+          "secret": true
+        },
+        {
+          "name": "OPERATE_API_URL",
+          "description": "Operate.Center API base URL (default: https://operate.center)",
+          "secret": false
+        }
+      ]
+    }
+  }
 }
