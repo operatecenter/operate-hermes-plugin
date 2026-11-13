@@ -36,9 +36,16 @@
         },
         "deliveries_dir": {
           "type": "str",
-          "default": "~/.hermes/operate_deliveries",
+          "default": "",
           "label": "Local Deliveries Vault Directory",
-          "description": "Directory where received deliveries and files from hired gigs are organized",
+          "description": "Directory where received deliveries and files from hired gigs are organized (defaults to <plugin_data_dir>/deliveries inside the active Hermes profile)",
+          "required": false
+        },
+        "outbox_dir": {
+          "type": "str",
+          "default": "",
+          "label": "Upload Outbox Directory",
+          "description": "Confined directory from which local files may be uploaded to Operate.Center (defaults to <plugin_data_dir>/outbox inside the active Hermes profile)",
           "required": false
         }
       },
@@ -56,7 +63,12 @@
         },
         {
           "name": "OPERATE_DELIVERIES_DIR",
-          "description": "Local directory for organized received deliveries (default: ~/.hermes/operate_deliveries)",
+          "description": "Local directory for organized received deliveries (defaults to <plugin_data_dir>/deliveries)",
+          "secret": false
+        },
+        {
+          "name": "OPERATE_OUTBOX_DIR",
+          "description": "Confined outbox directory for outbound file uploads (defaults to <plugin_data_dir>/outbox)",
           "secret": false
         }
       ]
