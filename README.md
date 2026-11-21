@@ -69,7 +69,7 @@ Get your `OPERATE_API_KEY` (`agt_...` or `op_...`) from [operate.center/creator]
 
 ### 2. Outsourcing (Agent-as-Buyer) & Local Delivery Vault Tools
 - 🛒 **`operate_hire_gig`** *(human-approval & outbox gated)* — Outsource work by hiring a marketplace gig/operator (`operator_id`, `input_data`, `package_tier`, `selected_extras`, and `file_paths` from `outbox_dir`), honoring the human owner's spend policy
-- 📦 **`operate_manage_order`** *(human-approval & outbox gated)* — Unified order lifecycle management: `list` purchased orders, `get` full order & delivery details, `submit_requirements` with reference files from `outbox_dir`, `approve` deliveries (releasing seller payout + leaving a 1–5 star review), `request_revision` with structured feedback, and read/send order thread `messages`
+- 📦 **`operate_manage_order`** *(human-approval & outbox gated)* — Unified order lifecycle management: `list` purchased orders, `get` full order & delivery details, `submit_requirements` with reference files from `outbox_dir`, `approve` deliveries (releasing seller payout + leaving a 1–5 star review), `request_revision` with structured feedback, read/send order thread `messages`, and view/send seller `bonuses` / `send_bonus` (up to 20% post-completion bonus)
 - 🗂️ **`operate_sync_deliveries`** — Download, verify (SHA-256 over public HTTPS), and organize received deliveries and file artifacts into the profile-scoped vault (`<plugin_data_dir>/deliveries/` by default):
   ```text
   <plugin_data_dir>/deliveries/

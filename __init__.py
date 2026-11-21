@@ -37,7 +37,7 @@ try:
 except ImportError:  # Standalone Python SDK mode outside Hermes
     _get_hermes_home = None  # type: ignore[assignment]
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 DEFAULT_API_URL = "https://operate.center"
 PLUGIN_NAMESPACE = "operate-hermes-plugin"
@@ -764,6 +764,24 @@ class OperateCenterClient:
             payload["attachments"] = attachments
         return self._request("POST", f"/api/order/{quoted_id}/messages", payload)
 
+    def get_bonuses(self, order_id: str) -> Dict[str, Any]:
+        """Fetch sent bonuses and bonus eligibility for a completed order."""
+        quoted_id = _quote_id(order_id, "orderId")
+        return self._request("GET", f"/api/order/{quoted_id}/bonus")
+
+    def send_bonus(
+        self,
+        order_id: str,
+        amount_usd: float,
+        note: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Create a Stripe Checkout session to send a bonus (up to 20% of paid gig) to the seller."""
+        quoted_id = _quote_id(order_id, "orderId")
+        payload: Dict[str, Any] = {"amount_usd": float(amount_usd)}
+        if note:
+            payload["note"] = str(note).strip()
+        return self._request("POST", f"/api/order/{quoted_id}/bonus", payload)
+
     # =========================================================================
     # Organized Local Delivery Vault (<plugin_data_dir>/deliveries)
     # =========================================================================
@@ -1456,8 +1474,8 @@ MANAGE_ORDER_SCHEMA: Dict[str, Any] = {
     "description": (
         "Inspect and manage orders as a buyer or seller: list purchased orders ('list'), inspect order & delivery ('get'), "
         "submit project requirements ('submit_requirements'), approve a delivery & release payout ('approve'), "
-        "request changes ('request_revision'), or read/send order chat messages ('messages', 'send_message'). "
-        "Requires human approval."
+        "request changes ('request_revision'), read/send order chat messages ('messages', 'send_message'), "
+        "or view/send seller bonuses ('bonuses', 'send_bonus'). Requires human approval."
     ),
     "parameters": {
         "type": "object",
@@ -1472,6 +1490,8 @@ MANAGE_ORDER_SCHEMA: Dict[str, Any] = {
                     "request_revision",
                     "messages",
                     "send_message",
+                    "bonuses",
+                    "send_bonus",
                 ],
                 "description": "Order lifecycle action to perform",
             },
@@ -1512,6 +1532,14 @@ MANAGE_ORDER_SCHEMA: Dict[str, Any] = {
             "message": {
                 "type": "string",
                 "description": "Message text when action='send_message'",
+            },
+            "amount_usd": {
+                "type": "number",
+                "description": "Bonus amount in USD (up to 20% of paid gig) when action='send_bonus'",
+            },
+            "note": {
+                "type": "string",
+                "description": "Optional thank-you note when action='send_bonus'",
             },
         },
         "required": ["action"],
@@ -1948,8 +1976,19 @@ def register(ctx: Any) -> None:
                 _record_telemetry(activity=f"💬 Sent message on order #{order_id}")
                 return res
 
+            if action in ("bonuses", "list_bonuses"):
+                return client.get_bonuses(order_id)
+
+            if action == "send_bonus":
+                amt = float(p.get("amount_usd") or p.get("amount") or 0.0)
+                if amt <= 0:
+                    raise ValueError("Missing or invalid 'amount_usd' for send_bonus")
+                res = client.send_bonus(order_id, amt, note=p.get("note") or p.get("message"))
+                _record_telemetry(activity=f"🎁 Sent ${amt:.2f} bonus for order #{order_id}")
+                return res
+
             raise ValueError(
-                f"Unsupported action '{action}'. Expected one of: get, list, submit_requirements, approve, request_revision, messages, send_message"
+                f"Unsupported action '{action}'. Expected one of: get, list, submit_requirements, approve, request_revision, messages, send_message, bonuses, send_bonus"
             )
 
         if isinstance(args, dict) and args.get("file_paths"):

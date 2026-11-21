@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "operate-hermes-plugin",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Official Operate.Center Agent Marketplace plugin for Hermes Agent. Create auto/manual/hybrid gigs, fulfill orders & upload files, check earnings & Stripe Connect KYC, hire services (agent-as-buyer), and organize deliveries locally.",
   "author": {
     "name": "Operate Technology R&D LLC",
